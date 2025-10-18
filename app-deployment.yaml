@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-mockup-app
+  labels:
+    app: my-mockup-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: my-mockup-app
+  template:
+    metadata:
+      labels:
+        app: my-mockup-app
+    spec:
+      containers:
+        - name: my-mockup-app
+          image: atulbarge1989/my-mockup-app:v2
+          ports:
+            - containerPort: 80
+          imagePullPolicy: Always
+      imagePullSecrets:
+        - name: my-registry-secret     
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-mockup-app-service
+  labels:
+    app: my-mockup-app
+spec:
+  selector:
+    app: my-mockup-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
+  type: LoadBalancer
+
